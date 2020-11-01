@@ -28,6 +28,10 @@ async function createWindow() {
 			autoplayPolicy: 'no-user-gesture-required',
 		},
 	});
+	win.webContents.on('render-process-gone', e => {
+		app.relaunch();
+		app.quit();
+	});
 
 	// prevent zoom gesture
 	const webContents = win.webContents;
