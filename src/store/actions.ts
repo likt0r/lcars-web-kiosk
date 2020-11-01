@@ -6,6 +6,7 @@ import { Config } from '@/utils/interfaces';
 export enum ActionTypes {
 	SET_CONFIG = 'SET_CONFIG',
 	SET_CURRENT_PAGE = 'SET_CURRENT_PAGE',
+	UPDATE_PAGE_URL = 'UPDATE_PAGE_URL',
 }
 
 type AugmentedActionContext = {
@@ -20,6 +21,10 @@ export interface Actions {
 	[ActionTypes.SET_CURRENT_PAGE](
 		{ commit }: AugmentedActionContext,
 		payload: string
+	): void;
+	[ActionTypes.UPDATE_PAGE_URL](
+		{ commit }: AugmentedActionContext,
+		{ uid, url }: { uid: string; url: string }
 	): void;
 }
 
@@ -36,5 +41,8 @@ export const actions: ActionTree<State, State> & Actions = {
 				isPlaying: false,
 			} as PageCacheEntry);
 		commit(MutationTypes.SET_CURRENT_PAGE, payload);
+	},
+	[ActionTypes.UPDATE_PAGE_URL]({ commit }, { uid, url }) {
+		commit(MutationTypes.UPDATE_PAGE_URL, { uid, url });
 	},
 };

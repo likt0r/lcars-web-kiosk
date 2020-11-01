@@ -17,6 +17,10 @@ export type Mutations<S = State> = {
 	[MutationTypes.SET_CURRENT_PAGE](state: S, uid: string): void;
 	[MutationTypes.ADD_TO_PAGE_CACHE](state: S, pageCacheEntry: PageCacheEntry): void;
 	[MutationTypes.REMOVE_FROM_PAGE_CACHE](state: S, uid: string): void;
+	[MutationTypes.UPDATE_PAGE_URL](
+		state: S,
+		{ uid, url }: { uid: string; url: string }
+	): void;
 };
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -36,5 +40,9 @@ export const mutations: MutationTree<State> & Mutations = {
 	},
 	[MutationTypes.REMOVE_FROM_PAGE_CACHE](state, uid) {
 		state.pageCache = state.pageCache.filter(p => p.uid !== uid);
+	},
+	[MutationTypes.UPDATE_PAGE_URL](state, { uid, url }) {
+		const page = state.contentPages.find(p => p.uid === uid);
+		if (page) page.url = url;
 	},
 };

@@ -1,11 +1,18 @@
 <template>
-	<webview ref="webview" :src="url" class="content" />
+	<webview ref="webview" :src="webViewUrl" class="content" />
 </template>
 
 <script lang="ts">
-import { onBeforeMount, onBeforeUnmount, onMounted, ref } from 'vue';
-import { defineComponent } from 'vue';
+import {
+	defineComponent,
+	onBeforeMount,
+	onBeforeUnmount,
+	onMounted,
+	ref,
+	nextTick,
+} from 'vue';
 
+import { useStore, ActionTypes } from '../store';
 export default defineComponent({
 	props: {
 		uid: {
@@ -19,29 +26,38 @@ export default defineComponent({
 	},
 
 	setup(props) {
-		let stateUpdater: number;
+		// Template refs
 		const webview = ref(null);
-		const state = ref(false);
-		function toggle() {
-			state.value = !state.value;
-		}
+
+		const store = useStore();
+		const webViewUrl = ref(props.url);
+		let stateUpdater: number;
 
 		onMounted(() => {
 			console.log(webview);
+			webViewUrl.value = props.url;
 			const loadstart = () => {
 				console.log('loading...', (webview.value as any).getURL());
+				if ((webview.value as any).getURL())
+					store.dispatch(ActionTypes.UPDATE_PAGE_URL, {
+						uid: props.uid,
+						url: (webview.value as any).getURL(),
+					});
 			};
 
 			const loadstop = () => {
 				console.log('finished');
 			};
-			(webview.value as any).addEventListener('did-start-loading', loadstart);
-			(webview.value as any).addEventListener('did-stop-loading', loadstop);
-			stateUpdater = window.setInterval(() => {
-				if ((webview.value as any).isCurrentlyAudible()) {
-					console.log('is playing ', props.uid);
-				}
-			}, 1000);
+			nextTick(() => {
+				(webview.value as any).addEventListener('did-start-loading', loadstart);
+				(webview.value as any).addEventListener('did-stop-loading', loadstop);
+
+				// stateUpdater = window.setInterval(() => {
+				// 	if ((webview.value as any).isCurrentlyAudible()) {
+				// 		console.log('is playing ', props.uid);
+				// 	}
+				// }, 1000);
+			});
 		});
 
 		onBeforeUnmount(() => {
@@ -50,6 +66,7 @@ export default defineComponent({
 
 		return {
 			webview,
+			webViewUrl,
 		};
 	},
 });
