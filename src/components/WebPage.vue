@@ -8,6 +8,8 @@ import {
 	onBeforeMount,
 	onBeforeUnmount,
 	onMounted,
+	computed,
+	watch,
 	ref,
 	nextTick,
 } from 'vue';
@@ -33,6 +35,14 @@ export default defineComponent({
 		const webViewUrl = ref(props.url);
 		let stateUpdater: number;
 
+		const isActive = computed(() => store.state.currentPage === props.uid);
+		const lastKeyEvent = computed(() => store.state.keyboard.lastKeyEvent);
+		watch(lastKeyEvent, (key, oldKey) => {
+			if (isActive.value && key && webview.value) {
+				console.log(key.keyCode);
+				(webview.value as any).sendInputEvent(JSON.parse(JSON.stringify(oldKey)));
+			}
+		});
 		onMounted(() => {
 			console.log(webview);
 			webViewUrl.value = props.url;

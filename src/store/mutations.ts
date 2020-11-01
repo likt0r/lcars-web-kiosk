@@ -9,6 +9,7 @@ export enum MutationTypes {
 	ADD_TO_PAGE_CACHE = 'ADD_TO_PAGE_CACHE',
 	REMOVE_FROM_PAGE_CACHE = 'REMOVE_FROM_PAGE_CACHE',
 	UPDATE_PAGE_URL = 'UPDATE_PAGE_URL',
+	SET_KEYCODE = 'SET_KEYCODE',
 }
 
 export type Mutations<S = State> = {
@@ -20,6 +21,10 @@ export type Mutations<S = State> = {
 	[MutationTypes.UPDATE_PAGE_URL](
 		state: S,
 		{ uid, url }: { uid: string; url: string }
+	): void;
+	[MutationTypes.SET_KEYCODE](
+		state: S,
+		keyEvent: { type: string; keyCode: string }
 	): void;
 };
 
@@ -44,5 +49,9 @@ export const mutations: MutationTree<State> & Mutations = {
 	[MutationTypes.UPDATE_PAGE_URL](state, { uid, url }) {
 		const page = state.contentPages.find(p => p.uid === uid);
 		if (page) page.url = url;
+	},
+	[MutationTypes.SET_KEYCODE](state, keyEvent) {
+		console.log('State.keyboard.lastKeyVent', keyEvent);
+		state.keyboard.lastKeyEvent = { ...keyEvent };
 	},
 };

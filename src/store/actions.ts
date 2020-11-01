@@ -7,6 +7,7 @@ export enum ActionTypes {
 	SET_CONFIG = 'SET_CONFIG',
 	SET_CURRENT_PAGE = 'SET_CURRENT_PAGE',
 	UPDATE_PAGE_URL = 'UPDATE_PAGE_URL',
+	SET_KEYCODE = 'SET_KEYCODE',
 }
 
 type AugmentedActionContext = {
@@ -26,6 +27,10 @@ export interface Actions {
 		{ commit }: AugmentedActionContext,
 		{ uid, url }: { uid: string; url: string }
 	): void;
+	[ActionTypes.SET_KEYCODE](
+		{ commit }: AugmentedActionContext,
+		keyEvent: { type: string; keyCode: string }
+	): void;
 }
 
 export const actions: ActionTree<State, State> & Actions = {
@@ -44,5 +49,8 @@ export const actions: ActionTree<State, State> & Actions = {
 	},
 	[ActionTypes.UPDATE_PAGE_URL]({ commit }, { uid, url }) {
 		commit(MutationTypes.UPDATE_PAGE_URL, { uid, url });
+	},
+	[ActionTypes.SET_KEYCODE]({ commit }, keyEvent) {
+		commit(MutationTypes.SET_KEYCODE, keyEvent);
 	},
 };

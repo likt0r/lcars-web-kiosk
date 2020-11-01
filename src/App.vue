@@ -1,6 +1,7 @@
 <template>
 	<LcarsInterface />
 	<ContentFrame />
+	<Keyboard />
 </template>
 <script lang="ts">
 import { onBeforeMount, onMounted, ref, defineComponent } from 'vue';
@@ -9,10 +10,12 @@ import { Config, ContentPage } from './utils/interfaces';
 
 import LcarsInterface from './components/LcarsInterface.vue';
 import ContentFrame from './components/ContentFrame.vue';
+import Keyboard from './components/Keyboard.vue';
 export default defineComponent({
 	components: {
 		LcarsInterface,
 		ContentFrame,
+		Keyboard,
 	},
 	setup() {
 		const store = useStore();
@@ -23,7 +26,7 @@ export default defineComponent({
 				{
 					uid: 'jellyfin',
 					label: 'Musik',
-					url: 'https://apollon.mywire.org',
+					url: 'https://jsonlint.com/',
 					browserBar: false,
 				} as ContentPage,
 				{

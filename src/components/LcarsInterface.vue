@@ -14,13 +14,14 @@
 </template>
 
 <script lang="ts">
-import { onBeforeMount, onMounted, ref, computed } from 'vue';
+import { ref, computed } from 'vue';
 import { defineComponent } from 'vue';
 import { useStore, ActionTypes } from '../store';
 
 export default defineComponent({
 	setup(props, context) {
 		const store = useStore();
+		const showKeyboard = ref(false);
 		const contentPages = computed(() => store.state.contentPages);
 		const currentPage = computed(() => store.state.currentPage);
 
@@ -28,10 +29,15 @@ export default defineComponent({
 			store.dispatch(ActionTypes.SET_CURRENT_PAGE, uid);
 			console.log('Set page', uid);
 		}
+		function toggleKeyboard(): void {
+			showKeyboard.value = !showKeyboard.value;
+		}
 		return {
 			currentPage,
 			contentPages,
+			showKeyboard,
 			setContentPage,
+			toggleKeyboard,
 		};
 	},
 });
