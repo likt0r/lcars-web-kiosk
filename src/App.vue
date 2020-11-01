@@ -5,12 +5,13 @@
 </template>
 <script lang="ts">
 import { onBeforeMount, onMounted, ref, defineComponent } from 'vue';
-import { useStore, ActionTypes } from './store';
-import { Config, ContentPage } from './utils/interfaces';
+import { useStore, ActionTypes } from '@/store';
+import { Config, ContentPage } from '@/utils/interfaces';
 
-import LcarsInterface from './components/LcarsInterface.vue';
-import ContentFrame from './components/ContentFrame.vue';
-import Keyboard from './components/Keyboard.vue';
+import LcarsInterface from '@/components/LcarsInterface.vue';
+import ContentFrame from '@/components/ContentFrame.vue';
+import Keyboard from '@/components/Keyboard.vue';
+
 export default defineComponent({
 	components: {
 		LcarsInterface,
@@ -26,7 +27,7 @@ export default defineComponent({
 				{
 					uid: 'jellyfin',
 					label: 'Musik',
-					url: 'https://jsonlint.com/',
+					url: 'https://apollon.mywire.org',
 					browserBar: false,
 				} as ContentPage,
 				{
