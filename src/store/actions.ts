@@ -8,6 +8,7 @@ export enum ActionTypes {
 	SET_CURRENT_PAGE = 'SET_CURRENT_PAGE',
 	UPDATE_PAGE_URL = 'UPDATE_PAGE_URL',
 	SET_KEYCODE = 'SET_KEYCODE',
+	UPDATE_CACHE = 'UPDATE_CACHE',
 }
 
 type AugmentedActionContext = {
@@ -23,6 +24,7 @@ export interface Actions {
 		{ commit }: AugmentedActionContext,
 		payload: string
 	): void;
+	[ActionTypes.UPDATE_CACHE]({ commit }: AugmentedActionContext, uid: string): void;
 	[ActionTypes.UPDATE_PAGE_URL](
 		{ commit }: AugmentedActionContext,
 		{ uid, url }: { uid: string; url: string }
@@ -43,9 +45,14 @@ export const actions: ActionTree<State, State> & Actions = {
 			commit(MutationTypes.ADD_TO_PAGE_CACHE, {
 				uid: state.currentPage,
 				closedAt: Date.now(),
-				isPlaying: false,
 			} as PageCacheEntry);
 		commit(MutationTypes.SET_CURRENT_PAGE, payload);
+	},
+	[ActionTypes.UPDATE_CACHE]({ commit, state }, uid) {
+		commit(MutationTypes.ADD_TO_PAGE_CACHE, {
+			uid: uid,
+			closedAt: Date.now(),
+		} as PageCacheEntry);
 	},
 	[ActionTypes.UPDATE_PAGE_URL]({ commit }, { uid, url }) {
 		commit(MutationTypes.UPDATE_PAGE_URL, { uid, url });

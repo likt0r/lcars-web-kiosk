@@ -2,7 +2,6 @@ import { ContentPage } from '@/utils/interfaces';
 
 export interface PageCacheEntry {
 	uid: string;
-	isPlaying: boolean;
 	closedAt: number;
 }
 

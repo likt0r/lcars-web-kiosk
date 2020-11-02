@@ -47,7 +47,6 @@ export default defineComponent({
 			console.log(webview);
 			webViewUrl.value = props.url;
 			const loadstart = () => {
-				console.log('loading...', (webview.value as any).getURL());
 				if ((webview.value as any).getURL())
 					store.dispatch(ActionTypes.UPDATE_PAGE_URL, {
 						uid: props.uid,
@@ -62,11 +61,12 @@ export default defineComponent({
 				(webview.value as any).addEventListener('did-start-loading', loadstart);
 				(webview.value as any).addEventListener('did-stop-loading', loadstop);
 
-				// stateUpdater = window.setInterval(() => {
-				// 	if ((webview.value as any).isCurrentlyAudible()) {
-				// 		console.log('is playing ', props.uid);
-				// 	}
-				// }, 1000);
+				stateUpdater = window.setInterval(() => {
+					if ((webview.value as any).isCurrentlyAudible()) {
+						store.dispatch(ActionTypes.UPDATE_CACHE, props.uid);
+						console.log('is playing ', props.uid);
+					}
+				}, 1000);
 			});
 		});
 

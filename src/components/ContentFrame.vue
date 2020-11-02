@@ -26,7 +26,7 @@ export default defineComponent({
 		const currentPage = computed(() => store.state.currentPage);
 		const cachedComponents = computed(() =>
 			store.state.contentPages.filter(
-				p => p.uid === currentPage.value || store.getters.isInCache(p.uid)
+				p => p.isService || p.uid === currentPage.value || store.getters.isInCache(p.uid)
 			)
 		);
 		return {
