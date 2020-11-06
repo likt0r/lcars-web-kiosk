@@ -1,14 +1,16 @@
 import { ActionTree, ActionContext, Commit } from 'vuex';
 import { Mutations, MutationTypes } from './mutations';
-import { State, PageCacheEntry } from './state';
-import { Config } from '@/utils/interfaces';
+import { State } from './state';
+import { Config, KeyEvent, PageCacheEntry } from '@/utils/interfaces';
+import { store } from '.';
 
 export enum ActionTypes {
 	SET_CONFIG = 'SET_CONFIG',
-	SET_CURRENT_PAGE = 'SET_CURRENT_PAGE',
 	UPDATE_PAGE_URL = 'UPDATE_PAGE_URL',
 	SET_KEYCODE = 'SET_KEYCODE',
-	UPDATE_CACHE = 'UPDATE_CACHE',
+	UPDATE_CACHE = 'SET_',
+	SET_CURRENT_PAGE = 'SET_CURRENT_PAGE',
+	SET_PAGE_PLAYING_STATE = 'SET_PAGE_PLAYING_STATE',
 }
 
 type AugmentedActionContext = {
@@ -19,19 +21,25 @@ type AugmentedActionContext = {
 } & Omit<ActionContext<State, State>, 'commit'>;
 
 export interface Actions {
-	[ActionTypes.SET_CONFIG]({ commit }: AugmentedActionContext, payload: Config): void;
+	[ActionTypes.SET_CONFIG](
+		{ commit }: AugmentedActionContext,
+		payload: Config
+	): void;
 	[ActionTypes.SET_CURRENT_PAGE](
 		{ commit }: AugmentedActionContext,
-		payload: string
+		uid: string
 	): void;
-	[ActionTypes.UPDATE_CACHE]({ commit }: AugmentedActionContext, uid: string): void;
+	[ActionTypes.SET_PAGE_PLAYING_STATE](
+		{ commit, dispatch, state }: AugmentedActionContext,
+		{ uid, isPlaying }: { uid: string; isPlaying: boolean }
+	): void;
 	[ActionTypes.UPDATE_PAGE_URL](
 		{ commit }: AugmentedActionContext,
 		{ uid, url }: { uid: string; url: string }
 	): void;
 	[ActionTypes.SET_KEYCODE](
 		{ commit }: AugmentedActionContext,
-		keyEvent: { type: string; keyCode: string }
+		keyEvent: KeyEvent
 	): void;
 }
 
@@ -40,18 +48,48 @@ export const actions: ActionTree<State, State> & Actions = {
 		commit(MutationTypes.SET_TIME_TO_PRESERVE_TAB, payload.timeToPreserveTab);
 		commit(MutationTypes.SET_CONTENT_PAGES, payload.contentPages);
 	},
-	[ActionTypes.SET_CURRENT_PAGE]({ commit, state }, payload) {
+	[ActionTypes.SET_CURRENT_PAGE]({ commit, state }, uid) {
 		if (state.currentPage)
-			commit(MutationTypes.ADD_TO_PAGE_CACHE, {
+			commit(MutationTypes.PUT_TO_PAGE_CACHE, {
 				uid: state.currentPage,
-				closedAt: Date.now(),
+				lastAction: Date.now(),
 			} as PageCacheEntry);
-		commit(MutationTypes.SET_CURRENT_PAGE, payload);
+		commit(MutationTypes.PUT_TO_PAGE_CACHE, {
+			uid,
+			lastAction: Date.now(),
+		} as PageCacheEntry);
+		commit(MutationTypes.SET_CURRENT_PAGE, uid);
 	},
-	[ActionTypes.UPDATE_CACHE]({ commit, state }, uid) {
-		commit(MutationTypes.ADD_TO_PAGE_CACHE, {
-			uid: uid,
-			closedAt: Date.now(),
+	[ActionTypes.SET_PAGE_PLAYING_STATE](
+		{ commit, dispatch, state },
+		{ uid, isPlaying }
+	) {
+		// if (isPlaying) {
+		// 	//stop other playing pages
+		// 	state.contentPages
+		// 		.filter(cP => cP.isPlaying)
+		// 		.forEach(cP => {
+		// 			// dispatch(ActionTypes.SET_KEYCODE, {
+		// 			// 	type: 'keyDown',
+		// 			// 	keyCode: cP.stopKey,
+		// 			// 	target: cP.uid,
+		// 			// });
+		// 			dispatch(ActionTypes.SET_KEYCODE, {
+		// 				type: 'char',
+		// 				keyCode: cP.stopKey,
+		// 				target: cP.uid,
+		// 			});
+		// 			dispatch(ActionTypes.SET_KEYCODE, {
+		// 				type: 'keyUp',
+		// 				keyCode: cP.stopKey,
+		// 				target: cP.uid,
+		// 			});
+		// 		});
+		// }
+		commit(MutationTypes.SET_PAGE_PLAYING_STATE, { uid, isPlaying });
+		commit(MutationTypes.PUT_TO_PAGE_CACHE, {
+			uid,
+			lastAction: Date.now(),
 		} as PageCacheEntry);
 	},
 	[ActionTypes.UPDATE_PAGE_URL]({ commit }, { uid, url }) {

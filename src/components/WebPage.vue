@@ -13,7 +13,7 @@ import {
 	ref,
 	nextTick,
 } from 'vue';
-
+import { WebviewTag } from 'electron';
 import { useStore, ActionTypes } from '../store';
 export default defineComponent({
 	props: {
@@ -31,6 +31,7 @@ export default defineComponent({
 		// Template refs
 		const webview = ref(null);
 
+		const isPlaying = ref(false);
 		const store = useStore();
 		const webViewUrl = ref(props.url);
 		let stateUpdater: number;
@@ -38,16 +39,16 @@ export default defineComponent({
 		const isActive = computed(() => store.state.currentPage === props.uid);
 		const lastKeyEvent = computed(() => store.state.keyboard.lastKeyEvent);
 		watch(lastKeyEvent, (key, oldKey) => {
-			if (isActive.value && key && webview.value) {
+			if (key?.target === props.uid) {
 				console.log(key.keyCode);
 				(webview.value as any).sendInputEvent(JSON.parse(JSON.stringify(oldKey)));
 			}
 		});
 		onMounted(() => {
-			console.log(webview);
+			const webviewNode = (webview.value as unknown) as WebviewTag;
 			webViewUrl.value = props.url;
 			const loadstart = () => {
-				if ((webview.value as any).getURL())
+				if (webviewNode.getURL())
 					store.dispatch(ActionTypes.UPDATE_PAGE_URL, {
 						uid: props.uid,
 						url: (webview.value as any).getURL(),
@@ -58,15 +59,22 @@ export default defineComponent({
 				console.log('finished');
 			};
 			nextTick(() => {
-				(webview.value as any).addEventListener('did-start-loading', loadstart);
-				(webview.value as any).addEventListener('did-stop-loading', loadstop);
-
-				stateUpdater = window.setInterval(() => {
-					if ((webview.value as any).isCurrentlyAudible()) {
-						store.dispatch(ActionTypes.UPDATE_CACHE, props.uid);
-						console.log('is playing ', props.uid);
-					}
-				}, 1000);
+				webviewNode.addEventListener('did-start-loading', loadstart);
+				webviewNode.addEventListener('did-stop-loading', loadstop);
+				webviewNode.addEventListener('media-started-playing', () => {
+					isPlaying.value = true;
+					store.dispatch(ActionTypes.SET_PAGE_PLAYING_STATE, {
+						uid: props.uid,
+						isPlaying: isPlaying.value,
+					});
+				});
+				webviewNode.addEventListener('media-paused', () => {
+					isPlaying.value = false;
+					store.dispatch(ActionTypes.SET_PAGE_PLAYING_STATE, {
+						uid: props.uid,
+						isPlaying: isPlaying.value,
+					});
+				});
 			});
 		});
 
@@ -75,6 +83,7 @@ export default defineComponent({
 		});
 
 		return {
+			isPlaying,
 			webview,
 			webViewUrl,
 		};

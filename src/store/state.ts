@@ -1,9 +1,4 @@
-import { ContentPage } from '@/utils/interfaces';
-
-export interface PageCacheEntry {
-	uid: string;
-	closedAt: number;
-}
+import { ContentPage, PageCacheEntry, KeyEvent } from '@/utils/interfaces';
 
 export const state = {
 	timeToPreserveTab: 30000,
@@ -12,10 +7,7 @@ export const state = {
 	pageCache: [] as Array<PageCacheEntry>,
 	keyboard: {
 		visible: false,
-		lastKeyEvent: null as {
-			type: string;
-			keyCode: string;
-		} | null,
+		lastKeyEvent: null as KeyEvent | null,
 	},
 };
 export type State = typeof state;

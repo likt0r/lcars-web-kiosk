@@ -13,6 +13,13 @@ function toHexCode(number) {
 	let hex = number.toString(16);
 	return `\\u${template.slice(0, 6 - Math.min(hex.length, 4)).concat(hex)}`;
 }
+function toChars(code) {
+	let key = code === '{space}' ? ' ' : code;
+	key = key === '{enter}' ? '\r' : key;
+	key = key === '{tab}' ? '\t' : key;
+	return key.length > 1 ? key.slice(1, key.length - 1) : key;
+}
+
 export default {
 	name: 'SimpleKeyboard',
 	props: {
@@ -32,6 +39,7 @@ export default {
 		this.keyboard = new Keyboard({
 			onChange: this.onChange,
 			onKeyPress: this.onKeyPress,
+			onKeyReleased: this.onKeyReleased,
 			theme: 'hg-theme-default dark',
 			layout,
 		});
@@ -40,25 +48,29 @@ export default {
 		onChange(input) {
 			this.$emit('onChange', input);
 		},
+
 		onKeyPress(code) {
 			/**
 			 * If you want to handle the shift and caps lock codes
 			 */
-			if (code === '{shift}' || code === '{lock}') return this.handleShift();
+
 			const keyEvent = {
 				type: 'keyDown',
-				keyCode: code.length > 1 ? code.slice(1, code.length - 1) : code,
+				keyCode: toChars(code),
 			};
-
 			this.$emit('onKeyPress', keyEvent);
 			setTimeout(() => {
 				keyEvent.type = 'char';
 				this.$emit('onKeyPress', keyEvent);
-				setTimeout(() => {
-					keyEvent.type = 'keyUp';
-					this.$emit('onKeyPress', keyEvent);
-				}, 5);
-			}, 5);
+			});
+		},
+		onKeyReleased(code) {
+			if (code === '{shift}' || code === '{lock}') return this.handleShift();
+			const keyEvent = {
+				type: 'keyUp',
+				keyCode: toChars(code),
+			};
+			this.$emit('onKeyPress', keyEvent);
 		},
 		handleShift() {
 			let currentLayout = this.keyboard.options.layoutName;

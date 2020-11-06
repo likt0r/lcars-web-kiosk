@@ -4,13 +4,14 @@
 	<Keyboard />
 </template>
 <script lang="ts">
-import { onBeforeMount, onMounted, ref, defineComponent } from 'vue';
+import 'ress/dist/ress.min.css';
+import { defineComponent } from 'vue';
 import { useStore, ActionTypes } from '@/store';
 import { Config, ContentPage } from '@/utils/interfaces';
 
 import LcarsInterface from '@/components/LcarsInterface.vue';
 import ContentFrame from '@/components/ContentFrame.vue';
-import Keyboard from '@/components/Keyboard.vue';
+import Keyboard from '@/components/Keyboard/index.vue';
 
 export default defineComponent({
 	components: {
@@ -21,7 +22,7 @@ export default defineComponent({
 	setup() {
 		const store = useStore();
 		const config: Config = {
-			timeToPreserveTab: 10000,
+			timeToPreserveTab: 1200000,
 			startPage: 'jellyfin',
 			contentPages: [
 				{
@@ -30,7 +31,8 @@ export default defineComponent({
 					url: 'https://apollon.mywire.org',
 					browserBar: false,
 					isService: true,
-					stopKey: 'space',
+					stopKey: ' ',
+					bgColor: '#ce6667',
 				} as ContentPage,
 				{
 					uid: 'youtube',
@@ -38,15 +40,17 @@ export default defineComponent({
 					url: 'https://youtube.com',
 					browserBar: false,
 					isService: false,
-					stopKey: 'space',
+					stopKey: ' ',
+					bgColor: '#f8981d',
 				} as ContentPage,
 				{
 					uid: 'internet',
 					label: 'Internet',
-					url: 'https://google.com',
+					url: 'https://youtube.com',
 					browserBar: true,
 					isService: false,
-					stopKey: 'space',
+					stopKey: ' ',
+					bgColor: '#f8981d',
 				} as ContentPage,
 			],
 		};
@@ -56,30 +60,28 @@ export default defineComponent({
 });
 </script>
 <style>
+@font-face {
+	font-family: 'MyWebFont';
+	src: url('assets/fonts/swiss_911_ultra_compressed_bt.ttf'); /* IE9 Compat Modes */
+}
+
+body {
+}
 #app {
-	font-family: Avenir, Helvetica, Arial, sans-serif;
+	font-family: 'MyWebFont', Fallback, sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+	font-size: 1.8rem;
 	text-align: center;
 	color: #2c3e50;
 	background-color: black;
 	height: 100vh; /* Viewport-relative units */
 	width: 100vw;
 }
-
-#nav {
-	position: fixed;
-	padding: 30px;
+* {
+	-webkit-tap-highlight-color: transparent;
 }
 
-#nav a {
-	font-weight: bold;
-	color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-	color: #42b983;
-}
 body {
 	margin: 0;
 }
