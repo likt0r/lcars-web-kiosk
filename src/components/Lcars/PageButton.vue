@@ -1,7 +1,10 @@
 <template>
 	<li
 		:style="cssVars"
-		@click="setContentPage()"
+		@click="
+			playClick();
+			setContentPage();
+		"
 		:class="
 			`button lcars-element ${isActive ? 'active' : ''} ${
 				isPressed ? 'pressed' : ''
@@ -21,7 +24,7 @@
 import { ref, computed } from 'vue';
 import { defineComponent } from 'vue';
 import { useStore, ActionTypes } from '@/store';
-
+import addAudio from '@/compositions/addAudio';
 export default defineComponent({
 	props: {
 		uid: {
@@ -43,6 +46,7 @@ export default defineComponent({
 	setup(props) {
 		const store = useStore();
 		const isPressed = ref(false);
+		const { playClick } = addAudio();
 		const label = store.getters.getContentPage(props.uid).label;
 		const cssVars = computed(() => ({
 			'--bg-color': props.bgColor,
@@ -75,6 +79,7 @@ export default defineComponent({
 			down,
 			up,
 			isPressed,
+			playClick,
 		};
 	},
 });
