@@ -2,6 +2,13 @@
 	<div class="lcars flex-container--column">
 		<div class="top flex-container--row">
 			<MenuCornerTop :bgColor="colors.red" />
+		
+			<Tile v-for="(tile,index) in topTiles" 
+				:key="index" 
+				:bgColor="tile.color" 
+				:minHeight="tile.height"
+				:minWidth="tile.width"
+				/>
 		</div>
 		<ul class="left">
 			<PageButton
@@ -10,27 +17,69 @@
 				:uid="page.uid"
 				@click="setContentPage(page.uid)"
 				:bgColor="page.bgColor"
+				:minHeight="page.height"
 			>
 			</PageButton>
 		</ul>
-		<div class="bottom"></div>
+		<div class="bottom flex-container--row">
+			<MenuCornerTop :bgColor="colors.beige" class="cornerBottom" />
+		</div>
 	</div>
 </template>
 
 <script lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, reactive } from 'vue';
 import { defineComponent } from 'vue';
 import { useStore, ActionTypes } from '../store';
 import { colors } from '@/utils/enums';
 import PageButton from '@/components/Lcars/PageButton.vue';
 import MenuCornerTop from '@/components/Lcars/MenuCornerTop.vue';
+import Tile from '@/components/Lcars/Tile.vue'
+import { TileData } from '@/utils/interfaces'
 export default defineComponent({
 	components: {
 		PageButton,
 		MenuCornerTop,
+		Tile,
 	},
 	setup() {
 		const store = useStore();
+		const topTiles = [{
+			color: colors.darkBlue,
+			height: 18.3,
+			width: 100,
+		},{
+			color: colors.orange,
+			height: 18.3,
+			width: 20,
+		},{
+			color: colors.beige,
+			height: 10,
+			width: 120,
+		},{
+			color: colors.orange,
+			height: 18.3,
+			width: 60,
+		},{
+			color: colors.purple,
+			height: 18.3,
+			width: 160,
+		},{
+			color: colors.purple,
+			height: 18.3,
+			width: 120,
+		}
+		,{
+			color: colors.red,
+			height: 18.3,
+			width: 50,
+		},
+		{
+			color: colors.beige,
+			height: 18.3,
+			width: 100,
+		}
+		] as Array<TileData>;
 		const showKeyboard = ref(false);
 		const contentPages = computed(() => store.state.contentPages);
 		const currentPage = computed(() => store.state.currentPage);
@@ -43,6 +92,7 @@ export default defineComponent({
 			showKeyboard.value = !showKeyboard.value;
 		}
 		return {
+			topTiles,
 			currentPage,
 			contentPages,
 			showKeyboard,
@@ -55,6 +105,14 @@ export default defineComponent({
 </script>
 
 <style scoped>
+
+:root {
+  --shadow-color: #1e90ff;
+  --shadow-width: 4px;
+}
+ul {
+	list-style-type: none;
+}
 .lcars {
 	position: fixed;
 	height: 100vh;
@@ -72,6 +130,10 @@ export default defineComponent({
 	flex-direction: row;
 }
 
+.cornerBottom {
+	transform: scale3d( 1,-1,1);
+}
+
 .left {
 	color: white;
 	width: 100px;
@@ -85,20 +147,26 @@ export default defineComponent({
 .left li:first-child {
 	margin-top: 4px;
 }
-.top {
-}
-.bottom {
-	background: brown;
-	color: white;
 
-	height: 10px;
-}
 .lcars-element {
 	color: black;
 	background-color: var(--bg-color);
 	border: 1px solid rgba(112, 117, 121, 0.2);
-	border-radius: 2px;
-	box-shadow: 4px 4px 4px 4px;
+	border-radius: 0px;
+/*	box-shadow: 4px 4px 4px 4px #000000;*/
+	box-shadow: 0px 0px 0px 4px #000000;
 	user-select: none;
 }
+
+@keyframes textColorChange {
+    0% {color: #181818;}	
+	50% {color: #666666;}
+    100% {color: #181818;}
+}
+/* Use @-webkit-keyframes for Safari/Chrome */
+.processing  {
+    animation: textColorChange 3s infinite;
+}
+
+
 </style>

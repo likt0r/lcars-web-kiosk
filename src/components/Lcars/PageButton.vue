@@ -8,7 +8,7 @@
 		:class="
 			`button lcars-element ${isActive ? 'active' : ''} ${
 				isPressed ? 'pressed' : ''
-			} ${isPlaying ? 'playing' : ''}`
+			} ${isPlaying ? 'processing' : ''}`
 		"
 		@mousedown="down()"
 		@mouseup="up()"
@@ -99,9 +99,7 @@ export default defineComponent({
 .active {
 	filter: brightness(130%) contrast(80%);
 }
-.playing {
-	color: blue !important;
-}
+
 .button.pressed {
 	box-shadow: 1px 1px 1px 1px;
 	filter: brightness(90%);

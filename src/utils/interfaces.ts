@@ -7,8 +7,10 @@ export interface ContentPage {
 	browserBar: boolean;
 	isService: boolean;
 	stopKey: string;
-	isPlaying: boolean;
+	isPlaying: boolean | undefined;
 	bgColor: string;
+	height: number;
+	width: number;
 }
 
 export interface Config {
@@ -26,4 +28,10 @@ export interface KeyEvent {
 	target: string;
 	type: string;
 	keyCode: string;
+}
+
+export interface TileData {
+	color: string;
+	height: number;
+	width: number;
 }

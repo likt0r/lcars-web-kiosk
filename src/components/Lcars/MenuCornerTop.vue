@@ -5,6 +5,8 @@
 				xmlns="http://www.w3.org/2000/svg"
 				width="2.6in"
 				height="1.11111in"
+				class="shadow"
+				
 				viewBox="-0.6 0 237 100"
 			>
 				<path
@@ -12,6 +14,7 @@
 					:fill="bgColor"
 					stroke="rgba(112, 117, 121, 0.2)"
 					stroke-width="3"
+					class="shadow"
 					d="M 55.29,3.39
            C 34.07,10.18 17.48,24.82 6.96,46.25
              1.61,57.14 1.25,59.46 0.54,78.93
@@ -75,28 +78,37 @@ svg {
 	width: 122px;
 	height: 52px;
 	margin-left: -0.12px;
+	z-index: -1;
 }
 .bottom-ending {
 	width: 92px;
 	height: 23px;
 	background-color: var(--bg-color);
+	z-index: 10;
 	border: 1px;
 	margin-top: -10px;
 	margin-left: 0.1px;
 	border-width: 0 1px 1px 1px;
 	border-style: solid;
-	border-radius: 0 0 2px 2px;
+	border-radius: 0 0 1px 1px;
 	border-color: rgba(112, 117, 121, 0.2);
+	box-shadow:  4px 4px 0px 0px #000000, -4px 4px 0px 0px #000000;
 }
 .left-ending {
-	width: 120px;
+	width: 150px;
 	height: 18.3px;
 	margin-left: -8px;
 	background-color: var(--bg-color);
 	border: 1px;
 	border-width: 1px 1px 1px 0;
 	border-style: solid;
-	border-radius: 1px 2px 2px 0;
+	border-radius: 1px 1px 1px 0;
 	border-color: rgba(112, 117, 121, 0.2);
+	box-shadow: 4px 4px 0px 0px #000000 
 }
+
+.shadow { 
+filter: drop-shadow( 4px 4px 0px #000000 ) 
+drop-shadow( -4px -4px 0px #000000 );
+}	
 </style>

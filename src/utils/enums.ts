@@ -3,6 +3,8 @@ export enum colors {
 	orange = '#f8981d',
 	beige = '#fdcc99',
 	blue = '#9bbde4',
-	purple = '#9898cc',
+	darkBlue = '#9898cc',
+	purple = '#c1a4cd',
+	deepPurple = '#cc9ac6',
 	broderColor = 'rgba(112, 117, 121, 0.2)',
 }

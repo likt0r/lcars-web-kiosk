@@ -8,7 +8,7 @@ import 'ress/dist/ress.min.css';
 import { defineComponent } from 'vue';
 import { useStore, ActionTypes } from '@/store';
 import { Config, ContentPage } from '@/utils/interfaces';
-
+import { colors } from '@/utils/enums'
 import LcarsInterface from '@/components/LcarsInterface.vue';
 import ContentFrame from '@/components/ContentFrame.vue';
 import Keyboard from '@/components/Keyboard/index.vue';
@@ -32,7 +32,8 @@ export default defineComponent({
 					browserBar: false,
 					isService: true,
 					stopKey: ' ',
-					bgColor: '#ce6667',
+					bgColor: colors.red,
+					height: 80,
 				} as ContentPage,
 				{
 					uid: 'youtube',
@@ -41,7 +42,17 @@ export default defineComponent({
 					browserBar: false,
 					isService: false,
 					stopKey: ' ',
-					bgColor: '#f8981d',
+					bgColor: colors.orange,
+					height: 40,
+				} as ContentPage,
+				{
+					uid: 'soundcloud',
+					label: 'SoundCloud',
+					url: 'https://soundcloud.com',
+					browserBar: false,
+					isService: false,
+					stopKey: ' ',
+					bgColor: colors.beige,
 				} as ContentPage,
 				{
 					uid: 'internet',
@@ -50,7 +61,8 @@ export default defineComponent({
 					browserBar: true,
 					isService: false,
 					stopKey: ' ',
-					bgColor: '#f8981d',
+					height: 120,
+					bgColor: colors.beige,
 				} as ContentPage,
 			],
 		};
