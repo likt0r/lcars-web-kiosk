@@ -1,12 +1,13 @@
 'use strict';
 
 export interface ContentPage {
+	isSpacer: boolean | undefined;
 	uid: string;
-	label: string;
-	url: string;
-	browserBar: boolean;
-	isService: boolean;
-	stopKey: string;
+	label: string | undefined;
+	url: string | undefined;
+	browserBar: boolean | undefined;
+	isService: boolean | undefined ;
+	stopKey: string | undefined;
 	isPlaying: boolean | undefined;
 	bgColor: string;
 	height: number;

@@ -47,10 +47,15 @@ export default defineComponent({
 			type: String,
 			default: colors.red,
 		},
+		widthExtension: {
+			type: Number,
+			default: 150,
+		},
 	},
 	setup(props) {
 		const cssVars = computed(() => ({
 			'--bg-color': props.bgColor,
+			'--left-extension': props.widthExtension + 'px'
 		}));
 		return {
 			cssVars,
@@ -95,7 +100,7 @@ svg {
 	box-shadow:  4px 4px 0px 0px #000000, -4px 4px 0px 0px #000000;
 }
 .left-ending {
-	width: 150px;
+	width: var(--left-extension);
 	height: 18.3px;
 	margin-left: -8px;
 	background-color: var(--bg-color);

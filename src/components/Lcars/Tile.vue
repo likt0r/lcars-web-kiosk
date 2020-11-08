@@ -1,5 +1,10 @@
 <template>
-	<div
+<li v-if="li"
+		:style="cssVars"
+		class="lcars-element"
+	>
+	</li>
+	<div v-else 
 		:style="cssVars"
 		class="lcars-element"
 	>
@@ -23,13 +28,22 @@ export default defineComponent({
 		minWidth: {
 			type: Number,
 			default: 50,
-		},
+        },
+        li: {
+            type: Boolean,
+            default: false,
+        },
+        grow: {
+            type:Boolean,
+            default: false,
+        }
 	},
 	setup(props) {
 		const cssVars = computed(() => ({
 			'--bg-color': props.bgColor,
 			'--min-height': props.minHeight + 'px',
-			'--min-width': props.minWidth + 'px',
+            '--min-width': props.minWidth + 'px',
+            flex: "1 1 25%"
 		}));
 
 		

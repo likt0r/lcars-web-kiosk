@@ -61,7 +61,14 @@ export default defineComponent({
 					browserBar: true,
 					isService: false,
 					stopKey: ' ',
-					height: 120,
+					height: 100,
+					bgColor: colors.blue,
+				} as ContentPage,
+		
+				{
+					uid: 'baseline',
+					isService: false,
+					height: 176,
 					bgColor: colors.beige,
 				} as ContentPage,
 			],

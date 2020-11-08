@@ -11,18 +11,25 @@
 				/>
 		</div>
 		<ul class="left">
-			<PageButton
-				v-for="page in contentPages"
-				:key="page.uid"
-				:uid="page.uid"
-				@click="setContentPage(page.uid)"
-				:bgColor="page.bgColor"
-				:minHeight="page.height"
-			>
-			</PageButton>
+			<template v-for="page in contentPages" :key="page.uid">
+				<Tile v-if="page.isSpacer" :bgColor="colors.beige" :li="true" :grow="true"/>
+				<PageButton v-else
+					:uid="page.uid"
+					@click="setContentPage(page.uid)"
+					:bgColor="page.bgColor"
+					:minHeight="page.height"
+				/>
+			</template>
 		</ul>
+		
 		<div class="bottom flex-container--row">
-			<MenuCornerTop :bgColor="colors.beige" class="cornerBottom" />
+			<MenuCornerTop :bgColor="colors.beige" class="cornerBottom" :widthExtension="240"/>
+			<Tile v-for="(tile,index) in bottomTiles" 
+				:key="index" 
+				:bgColor="tile.color" 
+				:minHeight="tile.height"
+				:minWidth="tile.width"
+				/>
 		</div>
 	</div>
 </template>
@@ -80,6 +87,30 @@ export default defineComponent({
 			width: 100,
 		}
 		] as Array<TileData>;
+		const bottomTiles = [{
+			color: colors.orange,
+			height: 18.3,
+			width: 70,
+		},{
+			color: colors.beige,
+			height: 18.3,
+			width: 120,
+		},{
+			color: colors.blue,
+			height: 18.3,
+			width: 250,
+		}
+		,{
+			color: colors.red,
+			height: 18.3,
+			width: 50,
+		},
+		{
+			color: colors.beige,
+			height: 18.3,
+			width: 100,
+		}
+		] as Array<TileData>;
 		const showKeyboard = ref(false);
 		const contentPages = computed(() => store.state.contentPages);
 		const currentPage = computed(() => store.state.currentPage);
@@ -99,6 +130,7 @@ export default defineComponent({
 			setContentPage,
 			toggleKeyboard,
 			colors,
+			bottomTiles,
 		};
 	},
 });
@@ -137,7 +169,6 @@ ul {
 .left {
 	color: white;
 	width: 100px;
-	flex-grow: 100;
 }
 .left li {
 	margin-left: 4px;
@@ -146,6 +177,10 @@ ul {
 }
 .left li:first-child {
 	margin-top: 4px;
+}
+
+.bottom {
+	align-items: flex-end;
 }
 
 .lcars-element {
