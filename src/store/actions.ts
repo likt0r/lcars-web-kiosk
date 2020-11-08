@@ -11,6 +11,7 @@ export enum ActionTypes {
 	UPDATE_CACHE = 'SET_',
 	SET_CURRENT_PAGE = 'SET_CURRENT_PAGE',
 	SET_PAGE_PLAYING_STATE = 'SET_PAGE_PLAYING_STATE',
+	SET_KEYBOARD_VISIBLE = 'SET_KEYBOARD_VISIBLE'
 }
 
 type AugmentedActionContext = {
@@ -40,6 +41,10 @@ export interface Actions {
 	[ActionTypes.SET_KEYCODE](
 		{ commit }: AugmentedActionContext,
 		keyEvent: KeyEvent
+	): void;
+	[ActionTypes.SET_KEYBOARD_VISIBLE](
+		{commit}: AugmentedActionContext,
+		visible: boolean
 	): void;
 }
 
@@ -97,5 +102,8 @@ export const actions: ActionTree<State, State> & Actions = {
 	},
 	[ActionTypes.SET_KEYCODE]({ commit }, keyEvent) {
 		commit(MutationTypes.SET_KEYCODE, keyEvent);
+	},
+	[ActionTypes.SET_KEYBOARD_VISIBLE]({ commit }, visible) {
+		commit(MutationTypes.SET_KEYBOARD_VISIBLE, visible);
 	},
 };

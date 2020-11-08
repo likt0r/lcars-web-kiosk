@@ -11,6 +11,7 @@ export enum MutationTypes {
 	REMOVE_FROM_PAGE_CACHE = 'REMOVE_FROM_PAGE_CACHE',
 	UPDATE_PAGE_URL = 'UPDATE_PAGE_URL',
 	SET_KEYCODE = 'SET_KEYCODE',
+	SET_KEYBOARD_VISIBLE = 'SET_KEYBOARD_VISIBLE',
 }
 
 export type Mutations<S = State> = {
@@ -34,6 +35,7 @@ export type Mutations<S = State> = {
 		{ uid, url }: { uid: string; url: string }
 	): void;
 	[MutationTypes.SET_KEYCODE](state: S, keyEvent: KeyEvent): void;
+	[MutationTypes.SET_KEYBOARD_VISIBLE](state: S, visible: boolean): void;
 };
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -76,4 +78,7 @@ export const mutations: MutationTree<State> & Mutations = {
 		console.log('State.keyboard.lastKeyVent', keyEvent);
 		state.keyboard.lastKeyEvent = { ...keyEvent };
 	},
+	[MutationTypes.SET_KEYBOARD_VISIBLE](state, visible) {
+		state.keyboard.visible = visible
+	}
 };

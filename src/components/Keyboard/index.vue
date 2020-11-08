@@ -1,6 +1,5 @@
 <template>
 	<div class="keyboard">
-		<div class="button--soft-keyboard" @click="toggleKeyboard">keyboard</div>
 		<SimpleKeyboard
 			v-if="showKeyboard"
 			style="pointer-events: all"
@@ -10,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { defineComponent } from 'vue';
 import SimpleKeyboard from './SimpleKeyboard/index.vue';
 import { useStore, ActionTypes } from '@/store';
@@ -21,15 +20,13 @@ export default defineComponent({
 	},
 	setup() {
 		const store = useStore();
-		const showKeyboard = ref(false);
+		const showKeyboard = computed(()=> store.state.keyboard.visible);
 
-		function toggleKeyboard(): void {
-			showKeyboard.value = !showKeyboard.value;
-		}
+
 
 		function buttonPressed(key: { keyCode: string; type: string }): void {
 			if (key.keyCode === 'hide') {
-				return toggleKeyboard();
+				return store.dispatch(ActionTypes.SET_KEYBOARD_VISIBLE, false);
 			}
 			if (store.state.currentPage != null) {
 				store.dispatch(ActionTypes.SET_KEYCODE, {
@@ -40,7 +37,6 @@ export default defineComponent({
 		}
 		return {
 			showKeyboard,
-			toggleKeyboard,
 			buttonPressed,
 		};
 	},

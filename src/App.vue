@@ -84,8 +84,6 @@ export default defineComponent({
 	src: url('assets/fonts/swiss_911_ultra_compressed_bt.ttf'); /* IE9 Compat Modes */
 }
 
-body {
-}
 #app {
 	font-family: 'MyWebFont', Fallback, sans-serif;
 	-webkit-font-smoothing: antialiased;
