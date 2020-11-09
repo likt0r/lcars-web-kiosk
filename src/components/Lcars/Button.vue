@@ -1,29 +1,21 @@
 <template>
 	<li
 		:style="cssVars"
-		@click="
-			playClick();
-			setContentPage();
-		"
-		:class="
-			`button lcars-element ${isActive ? 'active' : ''} ${
-				isPressed ? 'pressed' : ''
-			} ${isPlaying ? 'processing' : ''}`
-		"
+		@click="playClick()"
+		:class="`button lcars-element ${isPressed ? 'pressed' : ''}`"
 		@mousedown="down()"
 		@mouseup="up()"
 		@touchdown="down()"
 		@touchup="up()"
 		@mouseleave="up()"
 	>
-		<span>{{ spanContent }}</span>
+		<span>{{ label }}</span>
 	</li>
 </template>
 
 <script lang="ts">
 import { ref, computed } from 'vue';
 import { defineComponent } from 'vue';
-import { useStore, ActionTypes } from '@/store';
 import addAudio from '@/compositions/addAudio';
 export default defineComponent({
 	props: {
@@ -47,25 +39,14 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const store = useStore();
 		const isPressed = ref(false);
 		const { playClick } = addAudio();
-		const label = props.label || store.getters.getContentPage(props.uid).label;
 		const cssVars = computed(() => ({
 			'--bg-color': props.bgColor,
 			'--min-height': props.minHeight + 'px',
 			'--min-width': props.minWidth + 'px',
 		}));
 
-		const isPlaying = computed(
-			() => store.getters.getContentPage(props.uid).isPlaying
-		);
-		const isActive = computed(() => store.state.currentPage === props.uid);
-
-		function setContentPage(): void {
-			store.dispatch(ActionTypes.SET_CURRENT_PAGE, props.uid);
-			console.log('Set page', props.uid);
-		}
 		function down() {
 			isPressed.value = true;
 		}
@@ -75,10 +56,6 @@ export default defineComponent({
 
 		return {
 			cssVars,
-			setContentPage,
-			isPlaying,
-			isActive,
-			spanContent: label,
 			down,
 			up,
 			isPressed,
@@ -99,9 +76,6 @@ export default defineComponent({
 	cursor: pointer;
 	transition: transform 0.2s, filter 0.2s, box-shadow 0.2s;
 }
-.active {
-	filter: brightness(130%) contrast(80%);
-}
 
 .button.pressed {
 	box-shadow: 1px 1px 1px 1px;
@@ -109,6 +83,6 @@ export default defineComponent({
 	transform: scale3d(0.95, 0.95, 0.95);
 }
 span {
-	padding-right: 4px;
+	padding: 4px;
 }
 </style>

@@ -1,14 +1,6 @@
 <template>
-<li v-if="li"
-		:style="cssVars"
-		class="lcars-element"
-	>
-	</li>
-	<div v-else 
-		:style="cssVars"
-		class="lcars-element"
-	>
-	</div>
+	<li v-if="li" :style="cssVars" class="lcars-element"></li>
+	<div v-else :style="cssVars" class="lcars-element"></div>
 </template>
 
 <script lang="ts">
@@ -28,25 +20,23 @@ export default defineComponent({
 		minWidth: {
 			type: Number,
 			default: 50,
-        },
-        li: {
-            type: Boolean,
-            default: false,
-        },
-        grow: {
-            type:Boolean,
-            default: false,
-        }
+		},
+		li: {
+			type: Boolean,
+			default: false,
+		},
+		grow: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	setup(props) {
 		const cssVars = computed(() => ({
 			'--bg-color': props.bgColor,
 			'--min-height': props.minHeight + 'px',
-            '--min-width': props.minWidth + 'px',
-            flex: "1 1 25%"
+			'--min-width': props.minWidth + 'px',
+			flex: '1 1 25%',
 		}));
-
-		
 
 		return {
 			cssVars,
@@ -59,9 +49,8 @@ export default defineComponent({
 .lcars-element {
 	height: var(--min-height);
 	min-width: var(--min-width);
-    background-color: var(--bg-color);
-    box-shadow: 0px 0px 0px 4px #000000;
-    margin-right: 4px;
+	background-color: var(--bg-color);
+	box-shadow: 0px 0px 0px 4px #000000;
+	margin-right: 4px;
 }
-
 </style>
