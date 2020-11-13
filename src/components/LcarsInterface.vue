@@ -181,6 +181,7 @@ ul {
 	left: 0;
 	top: 0;
 	pointer-events: none;
+	z-index: 1;
 }
 .flex-container--column {
 	display: flex;

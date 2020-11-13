@@ -1,10 +1,14 @@
 <template>
 	<div class="keyboard">
-		<SimpleKeyboard
-			v-if="showKeyboard"
-			style="pointer-events: all"
-			@onKeyPress="buttonPressed"
-		/>
+		<transition name="keyboard">
+			<keep-alive>
+				<SimpleKeyboard
+					v-if="showKeyboard"
+					class="softkey"
+					style="pointer-events: all"
+					@onKeyPress="buttonPressed"
+			/></keep-alive>
+		</transition>
 	</div>
 </template>
 
@@ -20,9 +24,7 @@ export default defineComponent({
 	},
 	setup() {
 		const store = useStore();
-		const showKeyboard = computed(()=> store.state.keyboard.visible);
-
-
+		const showKeyboard = computed(() => store.state.keyboard.visible);
 
 		function buttonPressed(key: { keyCode: string; type: string }): void {
 			if (key.keyCode === 'hide') {
@@ -57,5 +59,19 @@ export default defineComponent({
 	right: 0;
 	left: 0;
 	pointer-events: none;
+	opacity: 1;
+}
+
+.keyboard-enter-active {
+	transition: all 0.6s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+.keyboard-leave-active {
+	transition: all 0.6s ease;
+}
+
+.keyboard-enter-from,
+.keyboard-leave-to {
+	opacity: 0;
+	transform: translateY(400px);
 }
 </style>

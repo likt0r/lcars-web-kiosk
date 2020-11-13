@@ -41,7 +41,10 @@ export default defineComponent({
 		watch(lastKeyEvent, (key, oldKey) => {
 			if (key?.target === props.uid) {
 				console.log(key.keyCode);
-				(webview.value as any).sendInputEvent(JSON.parse(JSON.stringify(oldKey)));
+				if (typeof (webview.value as any).sendInputEvent === 'function')
+					(webview.value as any).sendInputEvent(
+						JSON.parse(JSON.stringify(oldKey))
+					);
 			}
 		});
 		onMounted(() => {
