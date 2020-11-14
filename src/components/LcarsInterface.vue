@@ -1,5 +1,5 @@
 <template>
-	<div class="lcars flex-container--column">
+	<div :class="`lcars flex-container--column${minimised ? ' minimised' : ''}`">
 		<div class="top flex-container--row">
 			<MenuCornerTop :bgColor="colors.red" />
 
@@ -9,6 +9,15 @@
 				:bgColor="tile.color"
 				:minHeight="tile.height"
 				:minWidth="tile.width"
+			/>
+			<Button
+				:uid="'menu-toggle'"
+				@click="toggleMinisied()"
+				label="Hide"
+				:bgColor="colors.orange"
+				:minHeight="20"
+				:minWidth="90"
+				style="justify-content: flex-start;align-items: flex-start; height:36px"
 			/>
 		</div>
 		<ul class="left">
@@ -44,9 +53,9 @@
 			/>
 			<Button
 				:uid="'keyboard'"
-				@click="toggleKeyboard()"
+				@click="showKeyboard()"
 				label="Keyboard"
-				:bgColor="colors.beige"
+				:bgColor="colors.orange"
 				:minHeight="40"
 				:minWidth="90"
 				style="justify-content: flex-start;align-items: flex-start;"
@@ -110,11 +119,6 @@ export default defineComponent({
 				height: 18.3,
 				width: 50,
 			},
-			{
-				color: colors.beige,
-				height: 18.3,
-				width: 100,
-			},
 		] as Array<TileData>;
 		const bottomTiles = [
 			{
@@ -138,7 +142,9 @@ export default defineComponent({
 				width: 50,
 			},
 		] as Array<TileData>;
-		const showKeyboard = ref(false);
+
+		const minimised = ref(false);
+
 		const contentPages = computed(() => store.state.contentPages);
 		const currentPage = computed(() => store.state.currentPage);
 
@@ -146,21 +152,22 @@ export default defineComponent({
 			store.dispatch(ActionTypes.SET_CURRENT_PAGE, uid);
 			console.log('Set page', uid);
 		}
-		function toggleKeyboard(): void {
-			store.dispatch(
-				ActionTypes.SET_KEYBOARD_VISIBLE,
-				!store.state.keyboard.visible
-			);
+		function showKeyboard(): void {
+			store.dispatch(ActionTypes.SET_KEYBOARD_VISIBLE, true);
+		}
+		function toggleMinisied(): void {
+			minimised.value = !minimised.value;
 		}
 		return {
 			topTiles,
 			currentPage,
 			contentPages,
-			showKeyboard,
 			setContentPage,
-			toggleKeyboard,
+			showKeyboard,
 			colors,
 			bottomTiles,
+			minimised,
+			toggleMinisied,
 		};
 	},
 });
@@ -181,7 +188,11 @@ ul {
 	left: 0;
 	top: 0;
 	pointer-events: none;
-	z-index: 1;
+	z-index: 10;
+	transition: transform 1s ease;
+}
+.lcars.minimised {
+	transform: translate3d(calc(-100vw + 10px), 0, 0);
 }
 .flex-container--column {
 	display: flex;
@@ -221,21 +232,5 @@ ul {
 	/*	box-shadow: 4px 4px 4px 4px #000000;*/
 	box-shadow: 0px 0px 0px 4px #000000;
 	user-select: none;
-}
-
-@keyframes textColorChange {
-	0% {
-		color: #181818;
-	}
-	50% {
-		color: #666666;
-	}
-	100% {
-		color: #181818;
-	}
-}
-/* Use @-webkit-keyframes for Safari/Chrome */
-.processing {
-	animation: textColorChange 3s infinite;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-	<div class="keyboard">
+	<div class="keyboard" :style="cssVars">
 		<transition name="keyboard">
 			<keep-alive>
 				<SimpleKeyboard
@@ -17,7 +17,7 @@ import { ref, computed } from 'vue';
 import { defineComponent } from 'vue';
 import SimpleKeyboard from './SimpleKeyboard/index.vue';
 import { useStore, ActionTypes } from '@/store';
-
+import { colors } from '@/utils/enums';
 export default defineComponent({
 	components: {
 		SimpleKeyboard,
@@ -37,9 +37,19 @@ export default defineComponent({
 				});
 			}
 		}
+		const cssVars = {
+			'--color-beige': colors.beige,
+			'--color-blue': colors.blue,
+			'--color-darkBlue': colors.darkBlue,
+			'--color-purple': colors.purple,
+			'--color-orange': colors.orange,
+			'--color-red': colors.red,
+			'--color-border-color': colors.broderColor,
+		};
 		return {
 			showKeyboard,
 			buttonPressed,
+			cssVars,
 		};
 	},
 });
@@ -60,6 +70,7 @@ export default defineComponent({
 	left: 0;
 	pointer-events: none;
 	opacity: 1;
+	z-index: 1000;
 }
 
 .keyboard-enter-active {
@@ -71,7 +82,6 @@ export default defineComponent({
 
 .keyboard-enter-from,
 .keyboard-leave-to {
-	opacity: 0;
 	transform: translateY(400px);
 }
 </style>

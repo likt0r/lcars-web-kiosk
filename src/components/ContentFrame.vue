@@ -1,15 +1,16 @@
 <template>
 	<div class="content">
-		<transition-group name="list">
-			<WebPage
-				class="page"
-				v-for="page in cachedComponents"
-				:key="page.uid"
-				:url="page.url"
-				:uid="page.uid"
-				v-show="currentPage === page.uid"
-			/>
-		</transition-group>
+		<template v-for="page in contentPages" :key="page.uid">
+			<transition name="slide">
+				<WebPage
+					class="page"
+					:url="page.url"
+					:uid="page.uid"
+					v-show="currentPage === page.uid"
+					v-if="cachedComponentUids.includes(page.uid)"
+				/>
+			</transition>
+		</template>
 	</div>
 </template>
 
@@ -17,6 +18,7 @@
 import { onBeforeMount, onMounted, ref, computed } from 'vue';
 import { defineComponent } from 'vue';
 import { useStore } from '@/store';
+import { ContentPage } from '@/utils/interfaces';
 import WebPage from '@/components/WebPage.vue';
 export default defineComponent({
 	components: {
@@ -27,50 +29,53 @@ export default defineComponent({
 
 		const contentPages = computed(() => store.state.contentPages);
 		const currentPage = computed(() => store.state.currentPage);
-		const cachedComponents = computed(() =>
-			store.state.contentPages.filter(
-				p =>
-					p.isService ||
-					p.uid === currentPage.value ||
-					store.getters.isInCache(p.uid)
-			)
+		const cachedComponentUids = computed(() =>
+			store.state.contentPages
+				.filter(
+					p =>
+						p.isService ||
+						p.uid === currentPage.value ||
+						store.getters.isInCache(p.uid)
+				)
+				.map(cp => cp.uid)
 		);
+
+		const colors = ['#ff0000', '#ffff00', '#00ffff', '#ff00ff'];
 		return {
 			contentPages,
 			currentPage,
-			cachedComponents,
+			cachedComponentUids,
+			colors,
 		};
 	},
 });
 </script>
 <style scoped>
-.page {
-	height: 100vh;
-	width: 100vw;
-}
 .content {
 	height: 100vh;
 	width: 100vw;
 	overflow: hidden;
 }
 
-.list-item {
-	display: inline-block;
-	margin-right: 10px;
+.page {
+	height: 100vh;
+	width: 100vw;
+	position: fixed;
 }
-.list-enter-active {
-	transition: all 3s;
+
+.slide-enter-active {
+	transition: all 0.4s ease;
+	z-index: 1;
 }
-.list-leave-active {
-	transition: all 1s;
+.slide-leave-active {
+	transition: all 0.4s ease;
+	z-index: 0;
 }
-.list-enter /* .list-leave-active below version 2.1.8 */ {
-	opacity: 0;
-	z-index: -1;
-	transform: translateX(100vw);
+
+.slide-enter-from {
+	transform: translateX(-100vw);
 }
-.list-leave-to {
-	z-index: -1;
+.slide-leave-to {
 	transform: translateX(100vw);
 }
 </style>
