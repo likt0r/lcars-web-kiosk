@@ -1,4 +1,4 @@
-import { Store, MutationTypes, State } from './index';
+import { Store, MutationTypes, ActionTypes, State } from './index';
 
 let cacheInterval: number;
 
@@ -21,6 +21,21 @@ export function cacheClearer(store: Store): void {
 					store.commit(MutationTypes.REMOVE_FROM_PAGE_CACHE, x.uid)
 				);
 			}, 1000);
+		}
+	});
+}
+
+let lockScreenTimer;
+
+export function logScreenTimer(store: Store): void {
+	store.subscribe((mutation, state: State) => {
+		if (mutation.type === MutationTypes.SET_SCREEN_LOCK) {
+			if (store.state.screenLocked === false) {
+				lockScreenTimer = setTimeout(
+					() => store.dispatch(ActionTypes.SET_SCREEN_LOCK, true),
+					600000
+				);
+			}
 		}
 	});
 }

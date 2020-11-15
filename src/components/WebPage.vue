@@ -15,6 +15,8 @@ import {
 } from 'vue';
 import { WebviewTag } from 'electron';
 import { useStore, ActionTypes } from '../store';
+import { NavigationActions } from '@/utils/enums';
+import addWebViewBus from '@/compositions/addWebViewBus';
 export default defineComponent({
 	props: {
 		uid: {
@@ -41,6 +43,10 @@ export default defineComponent({
 
 		const isActive = computed(() => store.state.currentPage === props.uid);
 		const lastKeyEvent = computed(() => store.state.keyboard.lastKeyEvent);
+		const currentNavigationAction = computed(
+			() => store.state.currentNavigationAction
+		);
+		const { registerBrowseEventListener } = addWebViewBus();
 		watch(lastKeyEvent, (key, oldKey) => {
 			if (key?.target === props.uid) {
 				console.log(key.keyCode);
@@ -48,6 +54,28 @@ export default defineComponent({
 					(webview.value as any).sendInputEvent(
 						JSON.parse(JSON.stringify(oldKey))
 					);
+			}
+		});
+		registerBrowseEventListener(event => {
+			if (store.state.currentPage === props.uid) {
+				console.log('CurrentAction ', event.action);
+				if (
+					event.action === NavigationActions.forward &&
+					(webview.value as any).canGoForward()
+				) {
+					(webview.value as any).goForward();
+				}
+				if (
+					event.action === NavigationActions.back &&
+					(webview.value as any).canGoBack()
+				) {
+					(webview.value as any).goBack();
+				}
+				if (event.action === NavigationActions.home) {
+					(webview.value as any).loadURL(
+						store.getters.getContentPage(props.uid).home
+					);
+				}
 			}
 		});
 		onMounted(() => {
@@ -97,7 +125,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .content {
 	width: 100%;
 	height: 100%;

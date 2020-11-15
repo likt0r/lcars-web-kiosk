@@ -1,6 +1,7 @@
 import { MutationTree } from 'vuex';
 import { ContentPage, KeyEvent, PageCacheEntry } from '@/utils/interfaces';
 import { State } from './state';
+import { NavigationActions } from '@/utils/enums';
 
 export enum MutationTypes {
 	SET_CONTENT_PAGES = 'SET_CONTENT_PAGES',
@@ -12,6 +13,9 @@ export enum MutationTypes {
 	UPDATE_PAGE_URL = 'UPDATE_PAGE_URL',
 	SET_KEYCODE = 'SET_KEYCODE',
 	SET_KEYBOARD_VISIBLE = 'SET_KEYBOARD_VISIBLE',
+	SET_SCREEN_LOCK = 'SET_SCREEN_LOCK',
+	SET_LCARS_MINIMISED = 'SET_LCARS_MINIMISED',
+	SET_NAVIGATION_ACTION = 'SET_NAVIGATION_ACTION',
 }
 
 export type Mutations<S = State> = {
@@ -36,6 +40,12 @@ export type Mutations<S = State> = {
 	): void;
 	[MutationTypes.SET_KEYCODE](state: S, keyEvent: KeyEvent): void;
 	[MutationTypes.SET_KEYBOARD_VISIBLE](state: S, visible: boolean): void;
+	[MutationTypes.SET_SCREEN_LOCK](state: S, locked: boolean): void;
+	[MutationTypes.SET_LCARS_MINIMISED](state: S, minimised: boolean): void;
+	[MutationTypes.SET_NAVIGATION_ACTION](
+		statE: S,
+		action: NavigationActions
+	): void;
 };
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -79,6 +89,15 @@ export const mutations: MutationTree<State> & Mutations = {
 		state.keyboard.lastKeyEvent = { ...keyEvent };
 	},
 	[MutationTypes.SET_KEYBOARD_VISIBLE](state, visible) {
-		state.keyboard.visible = visible
-	}
+		state.keyboard.visible = visible;
+	},
+	[MutationTypes.SET_SCREEN_LOCK](state, locked) {
+		state.screenLocked = locked;
+	},
+	[MutationTypes.SET_LCARS_MINIMISED](state, minimised) {
+		state.lcarsMinimised = minimised;
+	},
+	[MutationTypes.SET_NAVIGATION_ACTION](state, action) {
+		state.currentNavigationAction = action;
+	},
 };

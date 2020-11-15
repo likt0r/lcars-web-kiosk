@@ -8,3 +8,10 @@ export enum colors {
 	deepPurple = '#cc9ac6',
 	broderColor = 'rgba(112, 117, 121, 0.2)',
 }
+
+export enum NavigationActions {
+	back = 'back',
+	forward = 'forward',
+	reload = 'reload',
+	home = 'home',
+}

@@ -1,17 +1,25 @@
 <template>
-	<div class="content">
-		<template v-for="page in contentPages" :key="page.uid">
-			<transition name="slide">
-				<WebPage
-					class="page"
-					:url="page.url"
-					:uid="page.uid"
-					v-show="currentPage === page.uid"
-					v-if="cachedComponentUids.includes(page.uid)"
-				/>
-			</transition>
-		</template>
-	</div>
+	<transition name="slide" :run="keyboardVisible">
+		<div
+			:class="
+				`content ${!lcarsMinimised ? 'small' : 'expand'} ${
+					keyboardVisible ? 'keyboard' : ''
+				}`
+			"
+		>
+			<template v-for="page in contentPages" :key="page.uid">
+				<transition name="slide">
+					<WebPage
+						class="page"
+						:url="page.url"
+						:uid="page.uid"
+						v-show="currentPage === page.uid"
+						v-if="cachedComponentUids.includes(page.uid)"
+					/>
+				</transition>
+			</template>
+		</div>
+	</transition>
 </template>
 
 <script lang="ts">
@@ -29,6 +37,8 @@ export default defineComponent({
 
 		const contentPages = computed(() => store.state.contentPages);
 		const currentPage = computed(() => store.state.currentPage);
+		const lcarsMinimised = computed(() => store.state.lcarsMinimised);
+		const keyboardVisible = computed(() => store.state.keyboard.visible);
 		const cachedComponentUids = computed(() =>
 			store.state.contentPages
 				.filter(
@@ -45,22 +55,36 @@ export default defineComponent({
 			contentPages,
 			currentPage,
 			cachedComponentUids,
+			lcarsMinimised,
 			colors,
+			keyboardVisible,
 		};
 	},
 });
 </script>
 <style scoped>
 .content {
-	height: 100vh;
-	width: 100vw;
+	height: 100%;
+	width: 100%;
+	position: fixed;
 	overflow: hidden;
+	top: 0;
+	right: 0;
+	transition: all 0.22s;
 }
 
-.page {
+.content.small {
 	height: 100vh;
-	width: 100vw;
-	position: fixed;
+	transform: translateY(14px);
+	width: calc(100% - 100px);
+	height: calc(100% - 34px);
+	overflow: hidden;
+	transition-delay: 0.7s;
+}
+
+.content.keyboard {
+	height: calc(100% - 290px) !important;
+	transition-delay: 0.5s;
 }
 
 .slide-enter-active {

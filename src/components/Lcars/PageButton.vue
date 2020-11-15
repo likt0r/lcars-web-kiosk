@@ -1,10 +1,7 @@
 <template>
 	<li
 		:style="cssVars"
-		@click="
-			playClick();
-			setTimeout(() => setContentPage(), 50);
-		"
+		@click="click()"
 		:class="
 			`button lcars-element ${isActive ? 'active' : ''} ${
 				isPressed ? 'pressed' : ''
@@ -72,6 +69,10 @@ export default defineComponent({
 		function up() {
 			isPressed.value = false;
 		}
+		function click() {
+			playClick();
+			setTimeout(() => setContentPage(), 50);
+		}
 
 		return {
 			cssVars,
@@ -83,6 +84,7 @@ export default defineComponent({
 			up,
 			isPressed,
 			playClick,
+			click,
 		};
 	},
 });

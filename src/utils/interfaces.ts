@@ -3,10 +3,11 @@
 export interface ContentPage {
 	isSpacer: boolean | undefined;
 	uid: string;
+	home: string;
 	label: string | undefined;
 	url: string | undefined;
 	browserBar: boolean | undefined;
-	isService: boolean | undefined ;
+	isService: boolean | undefined;
 	stopKey: string | undefined;
 	isPlaying: boolean | undefined;
 	bgColor: string;

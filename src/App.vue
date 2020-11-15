@@ -1,23 +1,28 @@
 <template>
-	<LcarsInterface />
-	<ContentFrame />
-	<Keyboard />
+	<div :class="`main ${screenLocked ? 'screenLocked' : ''}`">
+		<LcarsInterface />
+		<ContentFrame />
+		<Keyboard />
+	</div>
+	<LoginScreen />
 </template>
 <script lang="ts">
 import 'ress/dist/ress.min.css';
-import { defineComponent } from 'vue';
+import { defineComponent, computed } from 'vue';
 import { useStore, ActionTypes } from '@/store';
 import { Config, ContentPage } from '@/utils/interfaces';
-import { colors } from '@/utils/enums'
+import { colors } from '@/utils/enums';
 import LcarsInterface from '@/components/LcarsInterface.vue';
 import ContentFrame from '@/components/ContentFrame.vue';
 import Keyboard from '@/components/Keyboard/index.vue';
+import LoginScreen from '@/components/LoginScreen.vue';
 
 export default defineComponent({
 	components: {
 		LcarsInterface,
 		ContentFrame,
 		Keyboard,
+		LoginScreen,
 	},
 	setup() {
 		const store = useStore();
@@ -28,53 +33,61 @@ export default defineComponent({
 				{
 					uid: 'jellyfin',
 					label: 'Musik',
+					home: 'https://apollon.mywire.org',
 					url: 'https://apollon.mywire.org',
 					browserBar: false,
 					isService: true,
 					stopKey: ' ',
 					bgColor: colors.red,
 					height: 80,
-				} as ContentPage,
+				},
 				{
 					uid: 'youtube',
 					label: 'Youtube',
+					home: 'https://youtube.com',
 					url: 'https://youtube.com',
 					browserBar: false,
 					isService: false,
 					stopKey: ' ',
 					bgColor: colors.orange,
 					height: 40,
-				} as ContentPage,
+				},
 				{
 					uid: 'soundcloud',
 					label: 'SoundCloud',
+					home: 'https://soundcloud.com',
 					url: 'https://soundcloud.com',
 					browserBar: false,
 					isService: false,
 					stopKey: ' ',
 					bgColor: colors.beige,
-				} as ContentPage,
+				},
 				{
 					uid: 'internet',
 					label: 'Internet',
-					url: 'https://youtube.com',
+					home: 'https://duckduckgo.com/',
+					url: 'https://duckduckgo.com/',
 					browserBar: true,
 					isService: false,
 					stopKey: ' ',
 					height: 100,
 					bgColor: colors.blue,
-				} as ContentPage,
-		
+				},
+
 				{
 					uid: 'baseline',
 					isService: false,
 					height: 176,
 					bgColor: colors.beige,
 				} as ContentPage,
-			],
+			] as ContentPage[],
 		};
 		store.dispatch(ActionTypes.SET_CONFIG, config);
 		store.dispatch(ActionTypes.SET_CURRENT_PAGE, config.startPage);
+		const screenLocked = computed(() => store.state.screenLocked);
+		return {
+			screenLocked,
+		};
 	},
 });
 </script>
@@ -101,5 +114,11 @@ export default defineComponent({
 
 body {
 	margin: 0;
+}
+.main {
+	transition: all 2s ease;
+}
+.screenLocked {
+	opacity: 0;
 }
 </style>

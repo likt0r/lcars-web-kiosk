@@ -4,12 +4,41 @@
 			<MenuCornerTop :bgColor="colors.red" />
 
 			<Tile
-				v-for="(tile, index) in topTiles"
+				v-for="(tile, index) in topTiles.slice(0, 3)"
 				:key="index"
 				:bgColor="tile.color"
 				:minHeight="tile.height"
 				:minWidth="tile.width"
 			/>
+			<Button
+				:uid="'goHome'"
+				@click="goHome()"
+				label="home"
+				:bgColor="colors.orange"
+				:minHeight="18.3"
+				:minWidth="60"
+				style="justify-content: center;align-items: center; height:20px; margin-right: 4px; font-size: 1.2rem"
+			/>
+			<Button
+				:uid="'goBack'"
+				@click="goBack()"
+				label="<"
+				:bgColor="colors.purple"
+				:minHeight="20"
+				:minWidth="110"
+				style="justify-content: center;align-items: center; height:26px; margin-right: 4px; font-size: 1.2rem"
+			/>
+			<Button
+				:uid="'goForward'"
+				@click="goForward()"
+				label=">"
+				:bgColor="colors.purple"
+				:minHeight="20"
+				:minWidth="90"
+				style="justify-content: center;align-items: center; height:26px; margin-right: 4px; font-size: 1.2rem"
+			/>
+
+			<Tile :bgColor="colors.red" :minHeight="18.3" :minWidth="50" />
 			<Button
 				:uid="'menu-toggle'"
 				@click="toggleMinisied()"
@@ -65,15 +94,16 @@
 </template>
 
 <script lang="ts">
-import { ref, computed, reactive } from 'vue';
-import { defineComponent } from 'vue';
+import { defineComponent, ref, computed, reactive } from 'vue';
+
 import { useStore, ActionTypes } from '../store';
-import { colors } from '@/utils/enums';
+import { colors, NavigationActions } from '@/utils/enums';
 import PageButton from '@/components/Lcars/PageButton.vue';
 import Button from '@/components/Lcars/Button.vue';
 import MenuCornerTop from '@/components/Lcars/MenuCornerTop.vue';
 import Tile from '@/components/Lcars/Tile.vue';
 import { TileData } from '@/utils/interfaces';
+import addWebViewBus from '@/compositions/addWebViewBus';
 export default defineComponent({
 	components: {
 		Button,
@@ -143,11 +173,12 @@ export default defineComponent({
 			},
 		] as Array<TileData>;
 
-		const minimised = ref(false);
+		const minimised = computed(() => store.state.lcarsMinimised);
 
 		const contentPages = computed(() => store.state.contentPages);
 		const currentPage = computed(() => store.state.currentPage);
-
+		const screenLocked = computed(() => store.state.screenLocked);
+		const { dispatchBrowseEvent } = addWebViewBus();
 		function setContentPage(uid: string): void {
 			store.dispatch(ActionTypes.SET_CURRENT_PAGE, uid);
 			console.log('Set page', uid);
@@ -156,8 +187,26 @@ export default defineComponent({
 			store.dispatch(ActionTypes.SET_KEYBOARD_VISIBLE, true);
 		}
 		function toggleMinisied(): void {
-			minimised.value = !minimised.value;
+			store.dispatch(
+				ActionTypes.SET_LCARS_MINIMISED,
+				!store.state.lcarsMinimised
+			);
 		}
+		function goBack(): void {
+			dispatchBrowseEvent({ action: NavigationActions.back });
+		}
+		function goForward(): void {
+			dispatchBrowseEvent({ action: NavigationActions.forward });
+		}
+		function goHome(): void {
+			dispatchBrowseEvent({ action: NavigationActions.home });
+		}
+		function reload(): void {
+			dispatchBrowseEvent({
+				action: NavigationActions.reload,
+			});
+		}
+
 		return {
 			topTiles,
 			currentPage,
@@ -168,6 +217,11 @@ export default defineComponent({
 			bottomTiles,
 			minimised,
 			toggleMinisied,
+			screenLocked,
+			goBack,
+			goForward,
+			goHome,
+			reload,
 		};
 	},
 });

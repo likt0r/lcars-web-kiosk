@@ -2,6 +2,7 @@ import { ActionTree, ActionContext, Commit } from 'vuex';
 import { Mutations, MutationTypes } from './mutations';
 import { State } from './state';
 import { Config, KeyEvent, PageCacheEntry } from '@/utils/interfaces';
+import { NavigationActions } from '@/utils/enums';
 import { store } from '.';
 
 export enum ActionTypes {
@@ -11,7 +12,10 @@ export enum ActionTypes {
 	UPDATE_CACHE = 'SET_',
 	SET_CURRENT_PAGE = 'SET_CURRENT_PAGE',
 	SET_PAGE_PLAYING_STATE = 'SET_PAGE_PLAYING_STATE',
-	SET_KEYBOARD_VISIBLE = 'SET_KEYBOARD_VISIBLE'
+	SET_KEYBOARD_VISIBLE = 'SET_KEYBOARD_VISIBLE',
+	SET_SCREEN_LOCK = 'SET_SCREEN_LOCK',
+	SET_LCARS_MINIMISED = 'SET_LCARS_MINIMISED',
+	SET_NAVIGATION_ACTION = 'SET_NAVIGATION_ACTION',
 }
 
 type AugmentedActionContext = {
@@ -43,8 +47,20 @@ export interface Actions {
 		keyEvent: KeyEvent
 	): void;
 	[ActionTypes.SET_KEYBOARD_VISIBLE](
-		{commit}: AugmentedActionContext,
+		{ commit }: AugmentedActionContext,
 		visible: boolean
+	): void;
+	[ActionTypes.SET_SCREEN_LOCK](
+		{ commit }: AugmentedActionContext,
+		locked: boolean
+	): void;
+	[ActionTypes.SET_LCARS_MINIMISED](
+		{ commit }: AugmentedActionContext,
+		minimised: boolean
+	): void;
+	[ActionTypes.SET_NAVIGATION_ACTION](
+		{ commit }: AugmentedActionContext,
+		action: NavigationActions
 	): void;
 }
 
@@ -105,5 +121,14 @@ export const actions: ActionTree<State, State> & Actions = {
 	},
 	[ActionTypes.SET_KEYBOARD_VISIBLE]({ commit }, visible) {
 		commit(MutationTypes.SET_KEYBOARD_VISIBLE, visible);
+	},
+	[ActionTypes.SET_SCREEN_LOCK]({ commit }, locked) {
+		commit(MutationTypes.SET_SCREEN_LOCK, locked);
+	},
+	[ActionTypes.SET_LCARS_MINIMISED]({ commit }, minimised) {
+		commit(MutationTypes.SET_LCARS_MINIMISED, minimised);
+	},
+	[ActionTypes.SET_NAVIGATION_ACTION]({ commit }, action) {
+		commit(MutationTypes.SET_NAVIGATION_ACTION, action);
 	},
 };

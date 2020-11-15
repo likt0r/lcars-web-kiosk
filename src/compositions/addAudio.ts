@@ -9,7 +9,6 @@ export default function() {
 	return {
 		playClick() {
 			const index = Math.round(Math.random() * (clicks.length - 1));
-			console.log(index);
 			clicks[index].play();
 		},
 	};

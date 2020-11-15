@@ -1,19 +1,27 @@
-import { createStore, Store as VuexStore, CommitOptions, DispatchOptions } from 'vuex';
+import {
+	createStore,
+	Store as VuexStore,
+	CommitOptions,
+	DispatchOptions,
+} from 'vuex';
 
 import { State, state } from './state';
 import { Getters, getters } from './getters';
 import { Mutations, mutations } from './mutations';
 import { Actions, actions } from './actions';
-import { cacheClearer } from './plugins';
+import { cacheClearer, logScreenTimer } from './plugins';
 export const store = createStore({
 	state,
 	getters,
 	mutations,
 	actions,
-	plugins: [cacheClearer],
+	plugins: [cacheClearer, logScreenTimer],
 });
 
-export type Store = Omit<VuexStore<State>, 'getters' | 'commit' | 'dispatch'> & {
+export type Store = Omit<
+	VuexStore<State>,
+	'getters' | 'commit' | 'dispatch'
+> & {
 	commit<K extends keyof Mutations, P extends Parameters<Mutations[K]>[1]>(
 		key: K,
 		payload: P,
