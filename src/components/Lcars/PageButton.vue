@@ -3,7 +3,7 @@
 		:style="cssVars"
 		@click="
 			playClick();
-			setContentPage();
+			setTimeout(() => setContentPage(), 50);
 		"
 		:class="
 			`button lcars-element ${isActive ? 'active' : ''} ${

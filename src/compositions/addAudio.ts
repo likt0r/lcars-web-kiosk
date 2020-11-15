@@ -4,6 +4,7 @@ const clicks = [
 	new Audio(require('@/assets/audio/keyok5.mp3')),
 ];
 
+clicks.forEach(audio => (audio.preload = 'auto'));
 export default function() {
 	return {
 		playClick() {
