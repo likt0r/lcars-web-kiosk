@@ -79,12 +79,12 @@ export default defineComponent({
 	width: calc(100% - 100px);
 	height: calc(100% - 34px);
 	overflow: hidden;
-	transition-delay: 0.7s;
+	transition-delay: transform 0.7s;
 }
 
 .content.keyboard {
-	height: calc(100% - 290px) !important;
-	transition-delay: 0.5s;
+	/* height: calc(100% - 290px) !important;
+	transition-delay: 0.5s; */
 }
 
 .slide-enter-active {

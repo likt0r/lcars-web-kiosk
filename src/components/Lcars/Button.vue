@@ -1,7 +1,7 @@
 <template>
 	<li
 		:style="cssVars"
-		@click="playClick()"
+		@click.stop="click()"
 		:class="`button lcars-element ${isPressed ? 'pressed' : ''}`"
 		@mousedown="down()"
 		@mouseup="up()"
@@ -38,7 +38,7 @@ export default defineComponent({
 			type: String,
 		},
 	},
-	setup(props) {
+	setup(props, context) {
 		const isPressed = ref(false);
 		const { playClick } = addAudio();
 		const cssVars = computed(() => ({
@@ -53,13 +53,16 @@ export default defineComponent({
 		function up() {
 			isPressed.value = false;
 		}
-
+		function click() {
+			playClick();
+			setTimeout(() => context.emit('click'), 50);
+		}
 		return {
 			cssVars,
 			down,
 			up,
 			isPressed,
-			playClick,
+			click,
 		};
 	},
 });
