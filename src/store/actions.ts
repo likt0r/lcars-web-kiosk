@@ -58,10 +58,6 @@ export interface Actions {
 		{ commit }: AugmentedActionContext,
 		minimised: boolean
 	): void;
-	[ActionTypes.SET_NAVIGATION_ACTION](
-		{ commit }: AugmentedActionContext,
-		action: NavigationActions
-	): void;
 }
 
 export const actions: ActionTree<State, State> & Actions = {
@@ -127,8 +123,5 @@ export const actions: ActionTree<State, State> & Actions = {
 	},
 	[ActionTypes.SET_LCARS_MINIMISED]({ commit }, minimised) {
 		commit(MutationTypes.SET_LCARS_MINIMISED, minimised);
-	},
-	[ActionTypes.SET_NAVIGATION_ACTION]({ commit }, action) {
-		commit(MutationTypes.SET_NAVIGATION_ACTION, action);
 	},
 };

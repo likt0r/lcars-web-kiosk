@@ -1,5 +1,10 @@
 <template>
-	<webview ref="webview" :src="webViewUrl" class="content" />
+	<webview
+		ref="webview"
+		:src="webViewUrl"
+		class="content"
+		@click="userInteraction()"
+	/>
 </template>
 
 <script lang="ts">
@@ -43,19 +48,28 @@ export default defineComponent({
 
 		const isActive = computed(() => store.state.currentPage === props.uid);
 		const lastKeyEvent = computed(() => store.state.keyboard.lastKeyEvent);
-		const currentNavigationAction = computed(
-			() => store.state.currentNavigationAction
-		);
-		const { registerBrowseEventListener } = addWebViewBus();
-		watch(lastKeyEvent, (key, oldKey) => {
-			if (key?.target === props.uid) {
-				console.log(key.keyCode);
-				if (typeof (webview.value as any).sendInputEvent === 'function')
-					(webview.value as any).sendInputEvent(
-						JSON.parse(JSON.stringify(oldKey))
-					);
+
+		function userInteraction() {
+			console.log('UserACtion');
+		}
+		const {
+			registerBrowseEventListener,
+			registerKeyListener,
+			dispatchKeyEvent,
+		} = addWebViewBus();
+
+		registerKeyListener(event => {
+			console.log('Keyevent', event);
+			if (event.target === props.uid) {
+				if (typeof (webview.value as any).sendInputEvent === 'function') {
+					(webview.value as any).sendInputEvent({
+						keyCode: event.keyCode,
+						type: event.type,
+					});
+				}
 			}
 		});
+
 		registerBrowseEventListener(event => {
 			if (store.state.currentPage === props.uid) {
 				console.log('CurrentAction ', event.action);
@@ -101,6 +115,13 @@ export default defineComponent({
 						uid: props.uid,
 						isPlaying: isPlaying.value,
 					});
+					console.log('media Started', store.state.contentPages);
+					store.state.contentPages
+						.filter(pC => pC.isPlaying && pC.uid !== props.uid)
+						.forEach(pC => {
+							console.log('media send to uid', pC.uid);
+							dispatchKeyEvent({ type: 'keyUp', keyCode: ' ', target: pC.uid });
+						});
 				});
 				webviewNode.addEventListener('media-paused', () => {
 					isPlaying.value = false;
@@ -120,6 +141,7 @@ export default defineComponent({
 			isPlaying,
 			webview,
 			webViewUrl,
+			userInteraction,
 		};
 	},
 });

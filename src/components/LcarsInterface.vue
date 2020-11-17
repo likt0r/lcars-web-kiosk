@@ -104,6 +104,7 @@ import MenuCornerTop from '@/components/Lcars/MenuCornerTop.vue';
 import Tile from '@/components/Lcars/Tile.vue';
 import { TileData } from '@/utils/interfaces';
 import addWebViewBus from '@/compositions/addWebViewBus';
+import addUserInterActionListener from '@/compositions/addUserInterActionListener';
 export default defineComponent({
 	components: {
 		Button,
@@ -179,6 +180,9 @@ export default defineComponent({
 		const currentPage = computed(() => store.state.currentPage);
 		const screenLocked = computed(() => store.state.screenLocked);
 		const { dispatchBrowseEvent } = addWebViewBus();
+		const { addInterActionListenerElement } = addUserInterActionListener();
+		addInterActionListenerElement(document.body);
+
 		function setContentPage(uid: string): void {
 			store.dispatch(ActionTypes.SET_CURRENT_PAGE, uid);
 			console.log('Set page', uid);

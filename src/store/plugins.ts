@@ -25,12 +25,13 @@ export function cacheClearer(store: Store): void {
 	});
 }
 
-let lockScreenTimer;
+let lockScreenTimer: any;
 
 export function logScreenTimer(store: Store): void {
 	store.subscribe((mutation, state: State) => {
 		if (mutation.type === MutationTypes.SET_SCREEN_LOCK) {
 			if (store.state.screenLocked === false) {
+				if (lockScreenTimer) clearTimeout(lockScreenTimer);
 				lockScreenTimer = setTimeout(
 					() => store.dispatch(ActionTypes.SET_SCREEN_LOCK, true),
 					600000

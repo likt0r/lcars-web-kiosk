@@ -5,7 +5,6 @@ export const state = {
 	contentPages: [] as Array<ContentPage>,
 	currentPage: null as string | null,
 	pageCache: [] as Array<PageCacheEntry>,
-	currentNavigationAction: NavigationActions.home,
 	lcarsMinimised: false,
 	keyboard: {
 		visible: false,

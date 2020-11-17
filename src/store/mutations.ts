@@ -15,7 +15,6 @@ export enum MutationTypes {
 	SET_KEYBOARD_VISIBLE = 'SET_KEYBOARD_VISIBLE',
 	SET_SCREEN_LOCK = 'SET_SCREEN_LOCK',
 	SET_LCARS_MINIMISED = 'SET_LCARS_MINIMISED',
-	SET_NAVIGATION_ACTION = 'SET_NAVIGATION_ACTION',
 }
 
 export type Mutations<S = State> = {
@@ -42,10 +41,6 @@ export type Mutations<S = State> = {
 	[MutationTypes.SET_KEYBOARD_VISIBLE](state: S, visible: boolean): void;
 	[MutationTypes.SET_SCREEN_LOCK](state: S, locked: boolean): void;
 	[MutationTypes.SET_LCARS_MINIMISED](state: S, minimised: boolean): void;
-	[MutationTypes.SET_NAVIGATION_ACTION](
-		statE: S,
-		action: NavigationActions
-	): void;
 };
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -96,8 +91,5 @@ export const mutations: MutationTree<State> & Mutations = {
 	},
 	[MutationTypes.SET_LCARS_MINIMISED](state, minimised) {
 		state.lcarsMinimised = minimised;
-	},
-	[MutationTypes.SET_NAVIGATION_ACTION](state, action) {
-		state.currentNavigationAction = action;
 	},
 };

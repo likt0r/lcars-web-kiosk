@@ -18,6 +18,7 @@ import { defineComponent } from 'vue';
 import SimpleKeyboard from './SimpleKeyboard/index.vue';
 import { useStore, ActionTypes } from '@/store';
 import { colors } from '@/utils/enums';
+import addWebViewBus from '@/compositions/addWebViewBus';
 export default defineComponent({
 	components: {
 		SimpleKeyboard,
@@ -25,13 +26,13 @@ export default defineComponent({
 	setup() {
 		const store = useStore();
 		const showKeyboard = computed(() => store.state.keyboard.visible);
-
+		const { dispatchKeyEvent } = addWebViewBus();
 		function buttonPressed(key: { keyCode: string; type: string }): void {
 			if (key.keyCode === 'hide') {
 				return store.dispatch(ActionTypes.SET_KEYBOARD_VISIBLE, false);
 			}
 			if (store.state.currentPage != null) {
-				store.dispatch(ActionTypes.SET_KEYCODE, {
+				dispatchKeyEvent({
 					...key,
 					target: store.state.currentPage,
 				});
