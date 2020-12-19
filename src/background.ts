@@ -29,7 +29,7 @@ async function createWindow() {
 			// autoplayPolicy: 'no-user-gesture-required',
 		},
 	});
-	nativeTheme.themeSource = 'dark'
+	nativeTheme.themeSource = 'dark';
 	win.webContents.on('render-process-gone', e => {
 		app.relaunch();
 		app.quit();
@@ -101,6 +101,14 @@ app.on('ready', async () => {
 		} catch (e) {
 			console.error('Vue Devtools failed to install:', e.toString());
 		}
+	}
+	try {
+		await installExtension({
+			id: 'cjpalhdlnbpafiamejdnhcphjbkeiagm',
+			electron: '>=1.2.1',
+		});
+	} catch (e) {
+		console.error('u block failed to install:', e.toString());
 	}
 	createWindow();
 });
