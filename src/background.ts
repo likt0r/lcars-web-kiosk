@@ -1,6 +1,6 @@
 'use strict';
 
-import { app, protocol, BrowserWindow } from 'electron';
+import { app, protocol, BrowserWindow, nativeTheme } from 'electron';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 import installExtension from 'electron-devtools-installer';
 const isDevelopment = process.env.NODE_ENV !== 'production';
@@ -29,6 +29,7 @@ async function createWindow() {
 			// autoplayPolicy: 'no-user-gesture-required',
 		},
 	});
+	nativeTheme.themeSource = 'dark'
 	win.webContents.on('render-process-gone', e => {
 		app.relaunch();
 		app.quit();
