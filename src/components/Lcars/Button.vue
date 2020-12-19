@@ -55,7 +55,6 @@ export default defineComponent({
 		}
 		function click() {
 			playClick();
-			setTimeout(() => context.emit('click'), 50);
 		}
 		return {
 			cssVars,
