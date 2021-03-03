@@ -33,8 +33,10 @@ export default defineComponent({
 				{
 					uid: 'spoti2',
 					label: 'Musik',
-					home: 'https://spotizwei.apollon.mywire.org',
-					url: 'https://spotizwei.apollon.mywire.org',
+					home:
+						'https://spotizwei.apollon.mywire.org/web/index.html#!/music.html',
+					url:
+						'https://spotizwei.apollon.mywire.org/web/index.html#!/music.html',
 					browserBar: false,
 					isService: true,
 					stopKey: ' ',
