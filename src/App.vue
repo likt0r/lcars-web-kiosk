@@ -28,18 +28,29 @@ export default defineComponent({
 		const store = useStore();
 		const config: Config = {
 			timeToPreserveTab: 1200000,
-			startPage: 'jellyfin',
+			startPage: 'spoti2',
 			contentPages: [
 				{
-					uid: 'jellyfin',
+					uid: 'spoti2',
 					label: 'Musik',
-					home: 'https://apollon.mywire.org',
-					url: 'https://apollon.mywire.org',
+					home: 'https://spotizwei.apollon.mywire.org',
+					url: 'https://spotizwei.apollon.mywire.org',
 					browserBar: false,
 					isService: true,
 					stopKey: ' ',
 					bgColor: colors.red,
 					height: 80,
+				},
+				{
+					uid: 'franzible',
+					label: 'Audiobooks',
+					home: 'https://franzible.apollon.mywire.org',
+					url: 'https://franzible.apollon.mywire.org',
+					browserBar: false,
+					isService: true,
+					stopKey: ' ',
+					bgColor: colors.orange,
+					height: 40,
 				},
 				{
 					uid: 'youtube',
@@ -77,7 +88,7 @@ export default defineComponent({
 				{
 					uid: 'baseline',
 					isService: false,
-					height: 176,
+					height: 136,
 					bgColor: colors.beige,
 				} as ContentPage,
 			] as ContentPage[],
